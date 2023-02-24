@@ -127,3 +127,28 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+*.log
+*.png
+config.json
+=4.1.0
+.vscode
+.pytest_cache
+.idea
+base/utilities.txt
+base/cmds/__pycache__
+base/__pycache__
+base/db/__pycache__
+profile_output.txt
+__pycache__/bot.cpython-310.pyc
+src/*.png
+src/*.jpg
+bot.py.lprof
+tests
+_temp
+!src/imgs/extra/*.png
+!src/imgs/extra/bg/*.png
+!src/imgs/extra/inventario/*.png
+!src/imgs/extra/loja/*.png
+!src/imgs/extra/loja/banners/*.png
+!src/imgs/extra/perfil/*.png
