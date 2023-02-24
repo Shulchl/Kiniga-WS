@@ -1,0 +1,16 @@
+matplotlib
+aiohttp
+asyncpg
+discord.py
+requests
+beautifulsoup4
+pillow>=9.3.0
+lxml
+numpy
+psycopg2
+typing_extensions
+line_profiler
+quart
+Async-OAuthlib
+cachetools
+git+https://github.com/knuxify/Quart-Discord.git
