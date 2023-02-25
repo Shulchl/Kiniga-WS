@@ -16,6 +16,9 @@ from shop.routes.utils import app
 from quart import Quart
 from shop.app_blueprint import app_blueprint
 
+from quart import Quart, redirect, url_for, render_template, request, Blueprint, abort
+from quart_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
+
 TEST_GUILD = discord.Object(id=943170102759686174)
 
 cfg = None
@@ -49,7 +52,44 @@ def log_handler() -> logging.Logger:
 log = log_handler()
 
 app = Quart(__name__)
+
+app.config["DISCORD_CLIENT_ID"] = str(cfg.client_id)
+app.config["DISCORD_CLIENT_SECRET"] = str(cfg.client_secret)
+app.config["DISCORD_REDIRECT_URI"] = str(cfg.red_uri)
+app.config["DISCORD_BOT_TOKEN"] = str(cfg.prefix)
+
 app.register_blueprint(app_blueprint, url_prefix='/shop')
+
+discord_ = DiscordOAuth2Session(app)
+
+@app.route("/login/")
+async def login():
+    return await discord_.create_session(scope=["identify", "guilds"])
+
+@app.route("/logout/")
+async def logout():
+    discord_.revoke()
+    return redirect(url_for("shop.index"))
+
+@app.route("/me/")
+@requires_authorization
+async def me():
+  user = await discord_.fetch_user()
+  return redirect(url_for("shop.index"))
+  
+
+@app.route("/callback/")
+async def callback():
+    await discord_.callback()
+    try:
+        return redirect(bot.url)
+    except:
+        return redirect(url_for(".me"))
+
+@app.errorhandler(Unauthorized)
+async def redirect_unauthorized(e):
+    bot.url = request.url
+    return redirect(url_for("shop.login"))
 
 log.warning(app.url_map)
 
