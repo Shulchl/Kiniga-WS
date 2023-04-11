@@ -21,6 +21,9 @@ class Config:
         
         # COISAS DO DISCORD
         self.bot_token = cfg['bot_token']
+        self.client_id = cfg['client_id']
+        self.client_secret = cfg['client_secret']
+        self.red_uri = cfg['red_uri']
         
         self.min_message_xp = cfg['min_message_xp']
         self.max_message_xp = cfg['max_message_xp']

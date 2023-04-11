@@ -10,7 +10,6 @@ from lib2to3.pytree import convert
 from typing import Any, Optional
 from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 from base.struct import Config
-from base.db.pgUtils import print_psycopg2_exception as pycopg_exception
 
 import line_profiler
 
@@ -90,7 +89,7 @@ class Database:
                         
             else:
                 # pass exception to function
-                pycopg_exception(err)
+                print (err)
 
             await conn.close()
 
@@ -118,7 +117,7 @@ class Database:
                     result = await conn.fetch(sql, *args)
             return result
         except Exception as err:
-            pycopg_exception(err)
+            raise (err)
 
     async def fetchval(self, sql: str, *args: Any) -> list:
         async with self.pool.acquire() as conn:
@@ -146,7 +145,7 @@ class Database:
             return result
 
         except Exception as err:
-            pycopg_exception(err)
+            raise (err)
 
 
 # GRANDIENT
@@ -446,13 +445,11 @@ class Rank:
         moldImage: str, 
         moldRounded: str, 
         userInfo: str,
-        
         userSpark: int, 
         userBirth: str, 
         staff: None, 
         rankName, 
         rankR: str,
-        
         rankG: str, 
         rankB: str, 
         rankImgxp, 
@@ -1291,7 +1288,9 @@ class Rank:
                         # ITEM EQUIP
                         bg_draw.text((int(largura + int((img.size[0]/2))),
                                       int(altura + int((img.size[1]/2))) + 103),
-                                     "/equipar %s" % (list_itens[0]['id'], ), fill=(0, 45, 62), anchor="ma",
+                                     "%s %s" % (
+                                        "/equipar" if list_itens[0]['type'].upper() != "UTILIZAVEL" else "/usar",
+                                        list_itens[0]['id'], ), fill=(0, 45, 62), anchor="ma",
                                      font=self.montserrat_extrabolditalic_equip)
 
                         ccount += 1

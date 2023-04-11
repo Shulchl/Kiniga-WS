@@ -258,7 +258,7 @@ class Shop(commands.Cog):
     async def equipar(self, interaction: Interaction, item_id: int):
         item = await self.db.fetch("""
             SELECT item_type_id, type_, name, group_ FROM itens WHERE id=(%s)
-            
+
         """ % (item_id, )
         )
         if item:

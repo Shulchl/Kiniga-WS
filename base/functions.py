@@ -27,7 +27,6 @@ from bs4 import BeautifulSoup
 
 from base.struct import Config
 from base.utilities import utilities
-from base.db.pgUtils import print_psycopg2_exception as pycopg_exception
 
 from discord.utils import format_dt
 
@@ -294,9 +293,9 @@ async def starterItens(self):
     except Exception as err:
         if isinstance(err, asyncpg.exceptions.PostgresSyntaxError):
             # pass exception to function
-            pycopg_exception(err)
+            raise (err)
         else:
-            pycopg_exception(err)
+            raise (err)
 
 
 async def get_roles(
